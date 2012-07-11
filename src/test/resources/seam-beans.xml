@@ -5,6 +5,7 @@
 	xmlns:mail="urn:java:org.jboss.seam.mail.core"
 	xmlns:my="urn:java:org.picketbox.solder.test.authentication.http"
 	xmlns:pb="urn:java:org.picketbox.authentication.http"
+	xmlns:pbAuthImpl="urn:java:org.picketbox.authentication.impl"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
 
 	<!-- Configure a HTTPBasicAuthentication bean -->
@@ -12,7 +13,7 @@
 		<s:replaces/>
 		<pb:authManager>
 			<s:value>
-				<my:MockHTTPBasicAuthenticationManager/>
+			    <pbAuthImpl:PropertiesFileBasedAuthenticationManager />
 			</s:value>
 		</pb:authManager>
 	</pb:HTTPBasicAuthentication>
@@ -22,7 +23,7 @@
 		<s:replaces/>
 		<pb:authManager>
 			<s:value>
-				<my:MockHTTPDigestAuthenticationManager/>
+			    <pbAuthImpl:PropertiesFileBasedAuthenticationManager />
 			</s:value>
 		</pb:authManager>
 		<pb:realmName>
@@ -38,7 +39,7 @@
 		<s:replaces/>
 		<pb:authManager>
 			<s:value>
-				<my:MockHTTPFormAuthenticationManager/>
+			    <pbAuthImpl:PropertiesFileBasedAuthenticationManager />
 			</s:value>
 		</pb:authManager>
 	</pb:HTTPFormAuthentication>

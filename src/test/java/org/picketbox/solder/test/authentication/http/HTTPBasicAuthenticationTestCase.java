@@ -21,7 +21,6 @@
  */
 package org.picketbox.solder.test.authentication.http;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -88,9 +87,8 @@ public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationT
     }
 
     private String getPositive() {
-        String str = "Aladdin:open sesame";
+        String str = "Aladdin:Open Sesame";
         String encoded = Base64.encodeBytes(str.getBytes());
-        assertEquals("QWxhZGRpbjpvcGVuIHNlc2FtZQ==", encoded);
         return encoded;
     }
 
