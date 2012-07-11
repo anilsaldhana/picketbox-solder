@@ -43,7 +43,7 @@ import org.picketbox.test.http.TestServletResponse;
 
 /**
  * <p>Unit test the {@link HTTPFormAuthentication} class.</p>
- * 
+ * @author anil saldhana
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  * 
  * @since July 9, 2012

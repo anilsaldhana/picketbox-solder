@@ -42,7 +42,7 @@ import org.picketbox.util.HTTPDigestUtil;
 
 /**
  * <p>Unit test the {@link HTTPDigestAuthentication} class.</p>
- * 
+ * @author anil saldhana
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  * 
  * @since July 9, 2012
