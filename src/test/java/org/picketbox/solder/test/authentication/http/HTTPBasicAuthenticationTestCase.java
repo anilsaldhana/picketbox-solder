@@ -40,7 +40,7 @@ import org.picketbox.util.Base64;
 
 /**
  * <p>Unit test the {@link HTTPBasicAuthentication} class.</p>
- * 
+ * @author anil saldhana
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
 public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationTestCase {
