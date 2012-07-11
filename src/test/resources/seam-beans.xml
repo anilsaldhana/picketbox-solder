@@ -1,0 +1,57 @@
+<beans
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:s="urn:java:ee"
+	xmlns:mail="urn:java:org.jboss.seam.mail.core"
+	xmlns:my="urn:java:org.picketbox.solder.test.authentication.http"
+	xmlns:pb="urn:java:org.picketbox.authentication.http"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
+
+	<!-- Configure a HTTPBasicAuthentication bean -->
+	<pb:HTTPBasicAuthentication>
+		<s:replaces/>
+		<pb:authManager>
+			<s:value>
+				<my:MockHTTPBasicAuthenticationManager/>
+			</s:value>
+		</pb:authManager>
+	</pb:HTTPBasicAuthentication>
+	
+	<!-- Configure a HTTPDigestAuthentication bean -->
+	<pb:HTTPDigestAuthentication>
+		<s:replaces/>
+		<pb:authManager>
+			<s:value>
+				<my:MockHTTPDigestAuthenticationManager/>
+			</s:value>
+		</pb:authManager>
+		<pb:realmName>
+			<s:value>testrealm@host.com</s:value>
+		</pb:realmName>
+		<pb:opaque>
+			<s:value>5ccc069c403ebaf9f0171e9517f40e41</s:value>
+		</pb:opaque>
+	</pb:HTTPDigestAuthentication>
+	
+	<!-- Configure a HTTPFormAuthentication bean -->
+	<pb:HTTPFormAuthentication>
+		<s:replaces/>
+		<pb:authManager>
+			<s:value>
+				<my:MockHTTPFormAuthenticationManager/>
+			</s:value>
+		</pb:authManager>
+	</pb:HTTPFormAuthentication>
+	
+	<!-- Configure a HTTPClientCertAuthentication bean -->
+	<pb:HTTPClientCertAuthentication>
+		<s:replaces/>
+		<pb:authManager>
+			<s:value>
+				<my:MockHTTPClientCertAuthenticationManager/>
+			</s:value>
+		</pb:authManager>
+	</pb:HTTPClientCertAuthentication>
+	
+	
+</beans>
