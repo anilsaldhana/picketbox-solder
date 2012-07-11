@@ -1,4 +1,6 @@
-picketbox-solder
-================
+PicketBox Solder
+==============
 
-PicketBox Solder is a module to be use by Solder applications.
+PicketBox and Solder Integration
+This repository contains the necessary API to use PicketBox in Solder applications.
+
