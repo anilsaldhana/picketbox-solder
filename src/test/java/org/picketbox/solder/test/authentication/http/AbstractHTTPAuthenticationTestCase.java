@@ -48,7 +48,6 @@ public abstract class AbstractHTTPAuthenticationTestCase {
     @Deployment
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "test.jar").addClass(HTTPBasicAuthentication.class)
-                .addClass(MockHTTPBasicAuthenticationManager.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, ArchivePaths.create("beans.xml"))
                 .addAsManifestResource("seam-beans.xml", ArchivePaths.create("seam-beans.xml"))
                 .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl").resolveAsFiles()[0]))
