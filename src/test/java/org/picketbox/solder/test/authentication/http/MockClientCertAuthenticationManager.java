@@ -24,25 +24,25 @@ package org.picketbox.solder.test.authentication.http;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
 
+import org.picketbox.authentication.AbstractAuthenticationManager;
 import org.picketbox.authentication.AuthenticationManager;
 import org.picketbox.authentication.DigestHolder;
-import org.picketbox.authentication.http.HTTPClientCertAuthentication;
+import org.picketbox.authentication.http.HTTPFormAuthentication;
 import org.picketbox.exceptions.AuthenticationException;
 
 /**
- * <p>{@link AuthenticationManager} class to be used during the tests using a {@link HTTPClientCertAuthentication}.</p>
+ * <p>{@link AuthenticationManager} class to be used during the tests using a {@link HTTPFormAuthentication}.</p>
  * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public class MockHTTPClientCertAuthenticationManager implements AuthenticationManager {
+public class MockClientCertAuthenticationManager extends AbstractAuthenticationManager {
 
     /* (non-Javadoc)
      * @see org.picketbox.authentication.AuthenticationManager#authenticate(java.lang.String, java.lang.Object)
      */
     @Override
     public Principal authenticate(final String username, Object credential) throws AuthenticationException {
-        if ("CN=jbid test, OU=JBoss, O=JBoss, C=US".equalsIgnoreCase(username)
-                && ((String) credential).startsWith("W2G")) {
+        if ("Aladdin".equalsIgnoreCase(username) && "Open Sesame".equalsIgnoreCase((String) credential)) {
             return new Principal() {
                 @Override
                 public String getName() {
