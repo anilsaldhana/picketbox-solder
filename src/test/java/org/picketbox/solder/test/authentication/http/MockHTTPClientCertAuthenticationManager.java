@@ -24,6 +24,7 @@ package org.picketbox.solder.test.authentication.http;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
 
+import org.picketbox.authentication.AbstractAuthenticationManager;
 import org.picketbox.authentication.AuthenticationManager;
 import org.picketbox.authentication.DigestHolder;
 import org.picketbox.authentication.http.HTTPClientCertAuthentication;
@@ -34,7 +35,7 @@ import org.picketbox.exceptions.AuthenticationException;
  * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public class MockHTTPClientCertAuthenticationManager implements AuthenticationManager {
+public class MockHTTPClientCertAuthenticationManager extends AbstractAuthenticationManager {
 
     /* (non-Javadoc)
      * @see org.picketbox.authentication.AuthenticationManager#authenticate(java.lang.String, java.lang.Object)
