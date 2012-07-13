@@ -23,6 +23,7 @@
 package org.picketbox.authentication.solder.test;
 
 
+
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -59,14 +60,21 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.picketbox.authentication.PicketBoxConstants;
+import org.picketbox.authentication.solder.servlet.listener.AuthenticationListener;
 
 /**
+ * <p>Tests the authentication process using the {@link AuthenticationListener}</p>
+ * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
 @RunWith(Arquillian.class)
 public class AuthenticationListenerTestCase {
-    
+
+    private static final String J_SESSIONID = "JIAS912323123123123";
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "admin";
+
     @Inject
     private ServletEventBridgeListener servletEventListener;
 
@@ -78,6 +86,9 @@ public class AuthenticationListenerTestCase {
         return TestUtil.createBasicTestArchive("seam-beans-auth-test.xml");
     }
 
+    /**
+     * <p>Tests the authentication process.</p>
+     */
     @Test
     public void testHTTPFormAuthentication() throws Exception {
         ServletContext ctx = mock(ServletContext.class);
@@ -86,25 +97,22 @@ public class AuthenticationListenerTestCase {
         
         servletEventListener.contextInitialized(new ServletContextEvent(ctx));
         
+        // lets send a first request and initialize the authentication process
         performPreAuthentication(ctx, session, chain);
+        
+        // lets send a authentication request with some credentiais
         performAuthentication(ctx, session, chain);
     }
 
     protected void performAuthentication(ServletContext ctx, HttpSession session, FilterChain chain) throws IOException,
             ServletException {
-        HttpServletRequest authenticationRequest = mock(HttpServletRequest.class);
-        HttpServletResponse authenticationResponse = mock(HttpServletResponse.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
         
-        when(authenticationRequest.getServletContext()).thenReturn(ctx);
-        when(authenticationRequest.getSession()).thenReturn(session);
-        when(authenticationRequest.getSession().getId()).thenReturn("JIAS912323123123123");
-        when(authenticationRequest.getSession(true)).thenReturn(session);
-        when(authenticationRequest.getSession(false)).thenReturn(session);
+        configureMockRequest(request, PicketBoxConstants.HTTP_FORM_J_SECURITY_CHECK, ctx, session);
         
-        when(authenticationRequest.getRequestURI()).thenReturn(PicketBoxConstants.HTTP_FORM_J_SECURITY_CHECK);
-        
-        when(authenticationRequest.getParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME)).thenReturn("admin");
-        when(authenticationRequest.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD)).thenReturn("admin");
+        when(request.getParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME)).thenReturn(USERNAME);
+        when(request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD)).thenReturn(PASSWORD);
         
         final Map<String, Object> sessionAttributes = new HashMap<String, Object>();
         
@@ -117,31 +125,37 @@ public class AuthenticationListenerTestCase {
             }
         }).when(session).setAttribute(anyString(), anyObject());
         
-        servletEventListener.requestInitialized(new ServletRequestEvent(ctx, authenticationRequest));
-        filter.doFilter(authenticationRequest, authenticationResponse, chain);
+        servletEventListener.requestInitialized(new ServletRequestEvent(ctx, request));
+        filter.doFilter(request, response, chain);
         
         Assert.assertNotNull(sessionAttributes.get(PicketBoxConstants.PRINCIPAL));
     }
 
     protected void performPreAuthentication(ServletContext ctx, HttpSession session, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest firstRequest = mock(HttpServletRequest.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse firstResponse = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-
-        when(firstRequest.getServletContext()).thenReturn(ctx);
-        when(firstRequest.getSession()).thenReturn(session);
-        when(firstRequest.getSession().getId()).thenReturn("JIAS912323123123123");
-        when(firstRequest.getSession(true)).thenReturn(session);
-        when(firstRequest.getSession(false)).thenReturn(session);
-        when(firstRequest.getHeaderNames()).thenReturn(Collections.enumeration(new ArrayList<String>()));
-        when(firstRequest.getCookies()).thenReturn(new ArrayList<Cookie>().toArray(new Cookie[] {}));
-        when(firstRequest.getParameterMap()).thenReturn(new HashMap<String, String[]>());
+        
+        configureMockRequest(request, "/test/index.jsp", ctx, session);
         when(ctx.getRequestDispatcher("/login.jsp")).thenReturn(dispatcher);
         
-        when(firstRequest.getRequestURI()).thenReturn("/test/index.jsp");
-        
-        servletEventListener.requestInitialized(new ServletRequestEvent(ctx, firstRequest));
-        filter.doFilter(firstRequest, firstResponse, chain);
+        servletEventListener.requestInitialized(new ServletRequestEvent(ctx, request));
+        filter.doFilter(request, firstResponse, chain);
+    }
+    
+    /**
+     * <p>Configures a mocked {@link HttpServletRequest} with some basic configurations.</p> 
+     */
+    private void configureMockRequest(HttpServletRequest request, String uri, ServletContext ctx, HttpSession session) {
+        when(request.getServletContext()).thenReturn(ctx);
+        when(request.getSession()).thenReturn(session);
+        when(request.getSession().getId()).thenReturn(J_SESSIONID);
+        when(request.getSession(true)).thenReturn(session);
+        when(request.getSession(false)).thenReturn(session);
+        when(request.getHeaderNames()).thenReturn(Collections.enumeration(new ArrayList<String>()));
+        when(request.getCookies()).thenReturn(new ArrayList<Cookie>().toArray(new Cookie[] {}));
+        when(request.getParameterMap()).thenReturn(new HashMap<String, String[]>());
+        when(request.getRequestURI()).thenReturn(uri);
     }
     
 }
