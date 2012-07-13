@@ -80,7 +80,7 @@ public class AuthenticationListener {
             HttpServletRequest request = (HttpServletRequest) requestContext.getRequest();
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
-            if (isUserAuthenticated(request)) {
+            if (isUserNotAuthenticated(request)) {
                 authenticate(request, response);
             }
         } catch (AuthenticationException e) {
@@ -93,7 +93,7 @@ public class AuthenticationListener {
      * Checks if the user is already authenticated.
      * </p>
      */
-    private boolean isUserAuthenticated(HttpServletRequest request) {
+    private boolean isUserNotAuthenticated(HttpServletRequest request) {
         return request.getSession().getAttribute(PicketBoxConstants.PRINCIPAL) == null;
     }
 
