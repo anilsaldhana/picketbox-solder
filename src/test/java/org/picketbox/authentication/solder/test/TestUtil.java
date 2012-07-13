@@ -19,43 +19,33 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.solder.test.authentication.http;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
+package org.picketbox.authentication.solder.test;
+
 import org.jboss.shrinkwrap.api.ArchivePaths;
+import org.jboss.shrinkwrap.api.Filter;
+import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
-import org.junit.runner.RunWith;
-import org.picketbox.authentication.http.HTTPBasicAuthentication;
+import org.picketbox.authentication.solder.AuthenticationScheme;
+
 /**
- * <p>Abstract class for test cases using</p>
- * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-@RunWith(Arquillian.class)
-public abstract class AbstractHTTPAuthenticationTestCase {
+public class TestUtil {
 
-    /**
-     * @return
-     */
-    @Deployment
-    public static Archive<?> createTestArchive() {
-        return ShrinkWrap.create(WebArchive.class, "test.jar").addClass(HTTPBasicAuthentication.class)
+    public static WebArchive createBasicTestArchive(String solderConfig) {
+        return ShrinkWrap.create(WebArchive.class, "test.jar")
+                .addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.authentication.solder.test")),AuthenticationScheme.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, ArchivePaths.create("beans.xml"))
-                .addAsManifestResource("seam-beans.xml", ArchivePaths.create("seam-beans.xml"))
-                .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl").resolveAsFiles()[0]))
-                .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.picketbox:picketbox-core").resolveAsFiles()[0]));
+                .addAsManifestResource(solderConfig, ArchivePaths.create("seam-beans.xml"))
+                .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl").resolveAsFiles()[0]));
     }
 
-    public AbstractHTTPAuthenticationTestCase() {
-        super();
-    }
-
+    
 }

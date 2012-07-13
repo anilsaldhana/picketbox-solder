@@ -1,0 +1,23 @@
+<beans
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:s="urn:java:ee"
+	xmlns:mail="urn:java:org.jboss.seam.mail.core"
+	xmlns:pbSolderHTTPTest="urn:java:org.picketbox.authentication.solder.test.config"
+	xmlns:pb="urn:java:org.picketbox.authentication.http"
+	xmlns:pbs="urn:java:org.picketbox.authentication.solder"
+	xmlns:pbAuthImpl="urn:java:org.picketbox.authentication.impl"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
+
+	<!-- Configure a HTTPFormAuthentication bean -->
+	<pb:HTTPFormAuthentication>
+		<s:replaces/>
+		<pbs:AuthenticationScheme/>
+		<pb:authManager>
+			<s:value>
+			    <pbAuthImpl:PropertiesFileBasedAuthenticationManager />
+			</s:value>
+		</pb:authManager>
+	</pb:HTTPFormAuthentication>
+	
+</beans>
