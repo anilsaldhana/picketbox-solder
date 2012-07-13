@@ -23,15 +23,12 @@
 package org.picketbox.authentication.solder.test;
 
 import org.jboss.shrinkwrap.api.ArchivePaths;
-import org.jboss.shrinkwrap.api.Filter;
-import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
-import org.picketbox.authentication.solder.AuthenticationScheme;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -41,7 +38,6 @@ public class TestUtil {
 
     public static WebArchive createBasicTestArchive(String solderConfig) {
         return ShrinkWrap.create(WebArchive.class, "test.jar")
-                .addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.authentication.solder.test")),AuthenticationScheme.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, ArchivePaths.create("beans.xml"))
                 .addAsManifestResource(solderConfig, ArchivePaths.create("seam-beans.xml"))
                 .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl").resolveAsFiles()[0]));

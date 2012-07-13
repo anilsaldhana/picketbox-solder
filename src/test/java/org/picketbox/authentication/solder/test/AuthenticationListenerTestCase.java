@@ -52,6 +52,8 @@ import junit.framework.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.Filters;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.solder.servlet.event.ServletEventBridgeFilter;
 import org.jboss.solder.servlet.event.ServletEventBridgeListener;
 import org.junit.Test;
@@ -60,6 +62,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.picketbox.authentication.PicketBoxConstants;
+import org.picketbox.authentication.solder.AuthenticationScheme;
 import org.picketbox.authentication.solder.servlet.listener.AuthenticationListener;
 
 /**
@@ -83,7 +86,11 @@ public class AuthenticationListenerTestCase {
     
     @Deployment
     public static Archive<?> createTestArchive() {
-        return TestUtil.createBasicTestArchive("seam-beans-auth-test.xml");
+        WebArchive deployment = TestUtil.createBasicTestArchive("seam-beans-auth-test.xml");
+        
+        deployment.addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.authentication.solder.test")),AuthenticationScheme.class.getPackage());
+        
+        return deployment;
     }
 
     /**
