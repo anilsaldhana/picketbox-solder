@@ -9,6 +9,16 @@
 	<name>PicketBox Solder Module</name>
 	<description>PicketBox Solder is a specific module to be used by Solder applications.</description>
 	<packaging>jar</packaging>
+	<licenses>
+		<license>
+			<name>lgpl</name>
+			<url>http://repository.jboss.com/licenses/lgpl.txt</url>
+		</license>
+	</licenses>
+	<organization>
+		<name>JBoss Inc.</name>
+		<url>http://www.jboss.org</url>
+	</organization>
 	<properties>
 		<arquillian.version>1.0.1.Final</arquillian.version>
 		<weld.version>1.1.0.Final</weld.version>
@@ -51,21 +61,19 @@
 			<artifactId>picketbox-core</artifactId>
 			<version>${picketbox.core.version}</version>
 		</dependency>
-                <dependency>
-                        <groupId>org.jboss.logging</groupId>
-                        <artifactId>jboss-logging</artifactId>
-                        <version>3.1.0.GA</version>
-                        <scope>provided</scope>
-                </dependency>
-                <dependency>
-                        <groupId>org.jboss.logging</groupId>
-                        <artifactId>jboss-logging-processor</artifactId>
-                        <version>1.0.0.Final</version>
-                        <scope>provided</scope>
-                        <optional>true</optional>
-                </dependency>
-
-		
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.1.0.GA</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging-processor</artifactId>
+			<version>1.0.0.Final</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.picketbox</groupId>
@@ -108,6 +116,11 @@
 			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
 			<scope>test</scope>
 		</dependency>
-                
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.5</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

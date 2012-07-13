@@ -24,4 +24,4 @@
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-package org.picketbox.solder.test;
+package org.picketbox.authentication.solder.test.config;
