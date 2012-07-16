@@ -19,9 +19,28 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.picketbox.solder.test.config;
 
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.Archive;
+import org.junit.runner.RunWith;
+import org.picketbox.solder.test.TestUtil;
 /**
+ * <p>Abstract class for test cases using Arquillian.</p>
+ * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-package org.picketbox.authentication.solder.test;
+@RunWith(Arquillian.class)
+public abstract class AbstractHTTPAuthenticationTestCase {
+
+    /**
+     * <p>Creates a simple JAR file for testing. The resulting JAR already have the main PicketBox and Solder dependencies.</p>
+     */
+    @Deployment
+    public static Archive<?> createTestArchive() {
+        return TestUtil.createBasicTestArchive("seam-beans.xml");
+    }
+
+}

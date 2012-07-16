@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.authentication.solder.servlet.listener;
+package org.picketbox.solder.authentication.servlet.listener;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -31,13 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.authentication.solder.AuthenticationScheme;
 import org.picketbox.core.PicketBoxConfiguration;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.authentication.http.AbstractHTTPAuthentication;
 import org.picketbox.core.authentication.http.HTTPAuthenticationScheme;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.solder.authentication.AuthenticationScheme;
 
 /**
  * <p>

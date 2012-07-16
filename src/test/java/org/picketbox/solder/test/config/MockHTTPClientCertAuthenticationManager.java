@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.authentication.solder.test.config;
+package org.picketbox.solder.test.config;
 
 import java.security.Principal;
 import java.security.cert.X509Certificate;

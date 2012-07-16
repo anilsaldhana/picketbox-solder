@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.authentication.solder.test;
+package org.picketbox.solder.test.authentication;
 
 
 
@@ -61,9 +61,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.picketbox.authentication.solder.AuthenticationScheme;
-import org.picketbox.authentication.solder.servlet.listener.AuthenticationListener;
 import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.solder.authentication.AuthenticationScheme;
+import org.picketbox.solder.authentication.servlet.listener.AuthenticationListener;
+import org.picketbox.solder.test.TestUtil;
 
 /**
  * <p>Tests the authentication process using the {@link AuthenticationListener}</p>
@@ -88,7 +89,7 @@ public class AuthenticationListenerTestCase {
     public static Archive<?> createTestArchive() {
         WebArchive deployment = TestUtil.createBasicTestArchive("seam-beans-auth-test.xml");
         
-        deployment.addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.authentication.solder.test")),AuthenticationScheme.class.getPackage());
+        deployment.addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.solder.test")),AuthenticationScheme.class.getPackage());
         
         return deployment;
     }
