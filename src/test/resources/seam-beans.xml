@@ -4,8 +4,8 @@
 	xmlns:s="urn:java:ee"
 	xmlns:mail="urn:java:org.jboss.seam.mail.core"
 	xmlns:pbSolderHTTPTest="urn:java:org.picketbox.authentication.solder.test.config"
-	xmlns:pb="urn:java:org.picketbox.authentication.http"
-	xmlns:pbAuthImpl="urn:java:org.picketbox.authentication.impl"
+	xmlns:pb="urn:java:org.picketbox.core.authentication.http"
+	xmlns:pbAuthImpl="urn:java:org.picketbox.core.authentication.impl"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
 
 	<!-- Configure a HTTPBasicAuthentication bean -->

@@ -21,21 +21,22 @@
  */
 package org.picketbox.authentication.solder.test.config;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Principal;
 import java.util.HashMap;
 
 import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.picketbox.authentication.PicketBoxConstants;
-import org.picketbox.authentication.http.HTTPFormAuthentication;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.core.authentication.http.HTTPFormAuthentication;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletContext.TestRequestDispatcher;
 import org.picketbox.test.http.TestServletRequest;
@@ -85,8 +86,8 @@ public class HTTPFormAuthenticationTestCase extends AbstractHTTPAuthenticationTe
         req.setRequestURI(orig);
 
         // Call the server to get the digest challenge
-        boolean result = httpForm.authenticate(req, resp);
-        assertFalse(result);
+        Principal result = httpForm.authenticate(req, resp);
+        assertNull(result);
 
         // We will test that the request dispatcher is set on the form login page
         TestRequestDispatcher rd = sc.getLast();
@@ -102,13 +103,14 @@ public class HTTPFormAuthenticationTestCase extends AbstractHTTPAuthenticationTe
             }
         });
         newReq.setRequestURI("http://msite" + PicketBoxConstants.HTTP_FORM_J_SECURITY_CHECK);
+        newReq.setContextPath("/msite");
         newReq.setParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME, "Aladdin");
         newReq.setParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD, "Open Sesame");
 
         result = httpForm.authenticate(newReq, resp);
-        assertTrue(result);
+        assertNotNull(result);
 
-        // After authentication, we should be redirected to the original url
-        assertTrue(resp.getSendRedirectedURI().equals(orig));
+        // After authentication, we should be redirected to the default page
+        assertEquals(resp.getSendRedirectedURI(), orig);
     }
 }

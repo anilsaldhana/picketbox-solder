@@ -24,11 +24,11 @@ package org.picketbox.authentication.solder.test.config;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
 
-import org.picketbox.authentication.AbstractAuthenticationManager;
-import org.picketbox.authentication.AuthenticationManager;
-import org.picketbox.authentication.DigestHolder;
-import org.picketbox.authentication.http.HTTPClientCertAuthentication;
-import org.picketbox.exceptions.AuthenticationException;
+import org.picketbox.core.authentication.AbstractAuthenticationManager;
+import org.picketbox.core.authentication.AuthenticationManager;
+import org.picketbox.core.authentication.DigestHolder;
+import org.picketbox.core.authentication.http.HTTPClientCertAuthentication;
+import org.picketbox.core.exceptions.AuthenticationException;
 
 /**
  * <p>{@link AuthenticationManager} class to be used during the tests using a {@link HTTPClientCertAuthentication}.</p>

@@ -21,13 +21,13 @@
  */
 package org.picketbox.authentication.solder.test.config;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Principal;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -36,8 +36,8 @@ import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.picketbox.authentication.PicketBoxConstants;
-import org.picketbox.authentication.http.HTTPClientCertAuthentication;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.core.authentication.http.HTTPClientCertAuthentication;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
@@ -88,13 +88,14 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractHTTPAuthentica
         assertNotNull(cert);
 
         // Call the server to get the digest challenge
-        boolean result = httpClientCert.authenticate(req, resp);
-        assertFalse(result);
+        Principal result = httpClientCert.authenticate(req, resp);
+        
+        assertNull(result);
 
         // Now set the certificate
         req.setAttribute(PicketBoxConstants.HTTP_CERTIFICATE, new X509Certificate[] { cert });
 
         result = httpClientCert.authenticate(req, resp);
-        assertTrue(result);
+        assertNotNull(result);
     }
 }
