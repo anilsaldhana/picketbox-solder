@@ -21,21 +21,23 @@
  */
 package org.picketbox.authentication.solder.test.config;
 
-import static org.junit.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Principal;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
-import org.picketbox.authentication.PicketBoxConstants;
-import org.picketbox.authentication.http.HTTPBasicAuthentication;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.core.authentication.http.HTTPBasicAuthentication;
+import org.picketbox.core.util.Base64;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
-import org.picketbox.util.Base64;
 
 /**
  * <p>Unit test the {@link HTTPBasicAuthentication} class.</p>
@@ -71,16 +73,16 @@ public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationT
 
         // Get Positive Authentication
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Basic " + getPositive());
-        boolean result = httpBasic.authenticate(req, resp);
+        Principal principal = httpBasic.authenticate(req, resp);
 
-        assertTrue(result);
+        assertNotNull(principal);
 
         req.clearHeaders();
 
         // Get Negative Authentication
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Basic " + getNegative());
-        result = httpBasic.authenticate(req, resp);
-        assertFalse(result);
+        principal = httpBasic.authenticate(req, resp);
+        assertNull(principal);
 
         String basicHeader = resp.getHeader(PicketBoxConstants.HTTP_WWW_AUTHENTICATE);
         assertTrue(basicHeader.startsWith("basic realm="));

@@ -61,9 +61,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.picketbox.authentication.PicketBoxConstants;
 import org.picketbox.authentication.solder.AuthenticationScheme;
 import org.picketbox.authentication.solder.servlet.listener.AuthenticationListener;
+import org.picketbox.core.authentication.PicketBoxConstants;
 
 /**
  * <p>Tests the authentication process using the {@link AuthenticationListener}</p>
@@ -135,7 +135,7 @@ public class AuthenticationListenerTestCase {
         servletEventListener.requestInitialized(new ServletRequestEvent(ctx, request));
         filter.doFilter(request, response, chain);
         
-        Assert.assertNotNull(sessionAttributes.get(PicketBoxConstants.PRINCIPAL));
+        Assert.assertNotNull(sessionAttributes.get(PicketBoxConstants.SUBJECT));
     }
 
     protected void performPreAuthentication(ServletContext ctx, HttpSession session, FilterChain chain) throws IOException, ServletException {

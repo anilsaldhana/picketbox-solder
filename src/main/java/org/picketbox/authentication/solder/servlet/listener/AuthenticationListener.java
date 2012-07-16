@@ -26,19 +26,18 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.PicketBoxMessages;
-import org.picketbox.authentication.PicketBoxConstants;
-import org.picketbox.authentication.http.AbstractHTTPAuthentication;
-import org.picketbox.authentication.http.HTTPAuthenticationScheme;
 import org.picketbox.authentication.solder.AuthenticationScheme;
-import org.picketbox.exceptions.AuthenticationException;
+import org.picketbox.core.PicketBoxConfiguration;
+import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.PicketBoxMessages;
+import org.picketbox.core.authentication.http.AbstractHTTPAuthentication;
+import org.picketbox.core.authentication.http.HTTPAuthenticationScheme;
+import org.picketbox.core.exceptions.AuthenticationException;
 
 /**
  * <p>
@@ -58,6 +57,8 @@ public class AuthenticationListener {
     @Inject
     @AuthenticationScheme
     private HTTPAuthenticationScheme authenticationScheme;
+    
+    private PicketBoxManager securityManager;
 
     /**
      * <p>
@@ -68,6 +69,8 @@ public class AuthenticationListener {
         if (this.authenticationScheme instanceof AbstractHTTPAuthentication) {
             ((AbstractHTTPAuthentication) this.authenticationScheme).setServletContext(servletContext);
         }
+        
+        this.securityManager = PicketBoxConfiguration.configure().authentication(this.authenticationScheme).buildAndStart();
     }
 
     /**
@@ -94,7 +97,7 @@ public class AuthenticationListener {
      * </p>
      */
     private boolean isUserNotAuthenticated(HttpServletRequest request) {
-        return request.getSession().getAttribute(PicketBoxConstants.PRINCIPAL) == null;
+        return !this.securityManager.isAuthenticated(request);
     }
 
     /**
@@ -102,9 +105,9 @@ public class AuthenticationListener {
      * Initiates the authentication process.
      * </p>
      */
-    private void authenticate(ServletRequest request, ServletResponse response) throws AuthenticationException {
+    private void authenticate(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         if (!response.isCommitted()) {
-            this.authenticationScheme.authenticate(request, response);
+            this.securityManager.authenticate(request, response);
         }
     }
 
