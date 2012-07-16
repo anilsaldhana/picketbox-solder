@@ -70,7 +70,7 @@ public class AuthenticationListener {
             ((AbstractHTTPAuthentication) this.authenticationScheme).setServletContext(servletContext);
         }
         
-        this.securityManager = PicketBoxConfiguration.configure().authentication(this.authenticationScheme).buildAndStart();
+        this.securityManager = new PicketBoxConfiguration().authentication(this.authenticationScheme).buildAndStart();
     }
 
     /**
