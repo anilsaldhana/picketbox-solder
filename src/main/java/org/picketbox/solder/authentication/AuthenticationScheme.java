@@ -20,8 +20,27 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+package org.picketbox.solder.authentication;
+
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
+
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-package org.picketbox.authentication.solder.test.config;
+@Target({ METHOD, CONSTRUCTOR, FIELD })
+@Retention(RUNTIME)
+@Qualifier
+@Documented
+public @interface AuthenticationScheme {
+
+}
