@@ -34,19 +34,14 @@ import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.PicketBoxMessages;
-import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.core.exceptions.AuthorizationException;
 
 /**
  * <p>
- * This class is an integration point with Solder to provide authentication capabilities. Basically, it provides sobre methods
- * to observe servlet events like context initialization, request context initialization, etc.
- * </p>
- * <p>
- * Each request is intercepted by this component to execute authentication operations.
+ * This class is an integration point with Solder to provide authorization capabilities.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- *
  */
 @ApplicationScoped
 public class AuthorizationManager {
@@ -56,29 +51,29 @@ public class AuthorizationManager {
 
     /**
      * <p>
-     * Observes the {@link HttpServletRequest} and executes authentication.
+     * Observes the {@link HttpServletRequest} and executes authorization.
      * </p>
+     * @throws AuthorizationException if some problem occurs during the authorization process.
      */
-    public void observeRequest(@Observes @Initialized ServletRequestContext requestContext) throws AuthenticationException {
+    public void observeRequest(@Observes @Initialized ServletRequestContext requestContext) throws AuthorizationException {
         try {
             HttpServletRequest request = (HttpServletRequest) requestContext.getRequest();
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
             authorize(request, response);
-        } catch (AuthenticationException e) {
-            throw PicketBoxMessages.MESSAGES.authenticationFailed(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw PicketBoxMessages.MESSAGES.authorizationFailed(e);
         }
     }
 
     /**
      * <p>
-     * Initiates the authentication process.
+     * Perform authorization.
      * </p>
-     * @throws IOException
+     *
+     * @throws IOException if some problem occur redirecting the user to the error page.
      */
-    private void authorize(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
+    private void authorize(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!this.securityManager.authorize(request, response)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }

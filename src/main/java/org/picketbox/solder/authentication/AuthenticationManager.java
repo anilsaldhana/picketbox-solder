@@ -36,10 +36,8 @@ import org.picketbox.core.exceptions.AuthenticationException;
 
 /**
  * <p>
- * This class is an integration point with Solder to provide authentication capabilities.
- * </p>
- * <p>
- * Each request is intercepted by this component to execute authentication operations.
+ * This class is an integration point with Solder to provide authentication capabilities. Each request is intercepted by this
+ * component to execute authentication operations.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
