@@ -39,15 +39,14 @@ import org.picketbox.solder.authentication.AuthenticationScheme;
 
 /**
  * <p>
- * This class is an integration point with Solder to provide authentication capabilities. Basically, it provides sobre methods
- * to observe servlet events like context initialization, request context initialization, etc.
+ * This class provides an integration point to Solder. It is a listener for the {@link ServletContext} initialization event that
+ * builds and creates a {@link PicketBoxManager} instance.
  * </p>
  * <p>
- * Each request is intercepted by this component to execute authentication operations.
+ * It is mandatory to have a <i>META-INF/seam-beans.xml</i> file where your PicketBox configuration should be defined.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- *
  */
 @ApplicationScoped
 public class PicketBoxListener {
@@ -56,19 +55,32 @@ public class PicketBoxListener {
     @AuthenticationScheme
     private HTTPAuthenticationScheme authenticationScheme;
 
+    /**
+     * <p>
+     * {@link Instance} instance to get the {@link AuthorizationManager}. Since the authorization configuration is optional, the
+     * manager can not be inject as an usual injection point.
+     * </p>
+     */
     @Inject
     private Instance<AuthorizationManager> authorizationManager;
 
+    /**
+     * <p>
+     * Stores and produces a {@link PicketBoxManager} instance. The instance can be injected in any CDI bean as an usual
+     * injection point.
+     * </p>
+     */
     @SuppressWarnings("unused")
     @Produces
-    private PicketBoxManager securityManager;
+    @ApplicationScoped
+    private PicketBoxManager picketBoxManager;
 
     /**
      * <p>
-     * Observes the {@link ServletContext} and initialize the authentication components.
+     * Observes the {@link ServletContext} initialization and configures the {@link PicketBoxManager}.
      * </p>
      */
-    public void observeServletContextInitialize(@Observes @Initialized ServletContext servletContext) {
+    public void initializePicketBoxManager(@Observes @Initialized ServletContext servletContext) {
         if (this.authenticationScheme instanceof AbstractHTTPAuthentication) {
             ((AbstractHTTPAuthentication) this.authenticationScheme).setServletContext(servletContext);
         }
@@ -81,7 +93,7 @@ public class PicketBoxListener {
 
         }
 
-        this.securityManager = new PicketBoxConfiguration().authentication(this.authenticationScheme)
+        this.picketBoxManager = new PicketBoxConfiguration().authentication(this.authenticationScheme)
                 .authorization(authorizationManager).buildAndStart();
     }
 
