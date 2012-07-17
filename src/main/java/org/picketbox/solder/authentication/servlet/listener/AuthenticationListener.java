@@ -47,9 +47,9 @@ import org.picketbox.solder.authentication.AuthenticationScheme;
  * <p>
  * Each request is intercepted by this component to execute authentication operations.
  * </p>
- * 
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  */
 @ApplicationScoped
 public class AuthenticationListener {
@@ -57,7 +57,7 @@ public class AuthenticationListener {
     @Inject
     @AuthenticationScheme
     private HTTPAuthenticationScheme authenticationScheme;
-    
+
     private PicketBoxManager securityManager;
 
     /**
@@ -69,7 +69,7 @@ public class AuthenticationListener {
         if (this.authenticationScheme instanceof AbstractHTTPAuthentication) {
             ((AbstractHTTPAuthentication) this.authenticationScheme).setServletContext(servletContext);
         }
-        
+
         this.securityManager = new PicketBoxConfiguration().authentication(this.authenticationScheme).buildAndStart();
     }
 
