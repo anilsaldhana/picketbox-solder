@@ -72,7 +72,6 @@ public class PicketBoxListener {
      */
     @SuppressWarnings("unused")
     @Produces
-    @ApplicationScoped
     private PicketBoxManager picketBoxManager;
 
     /**
