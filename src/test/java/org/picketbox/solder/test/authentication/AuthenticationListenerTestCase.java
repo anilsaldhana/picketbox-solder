@@ -62,12 +62,12 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.solder.PicketBoxListener;
 import org.picketbox.solder.authentication.AuthenticationScheme;
-import org.picketbox.solder.authentication.servlet.listener.AuthenticationListener;
 import org.picketbox.solder.test.TestUtil;
 
 /**
- * <p>Tests the authentication process using the {@link AuthenticationListener}</p>
+ * <p>Tests the authentication process using the {@link PicketBoxListener}</p>
  * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
