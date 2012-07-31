@@ -22,6 +22,7 @@
 
 package org.picketbox.solder;
 
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
@@ -30,12 +31,12 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.core.PicketBoxConfiguration;
 import org.picketbox.core.PicketBoxManager;
-import org.picketbox.core.authentication.http.AbstractHTTPAuthentication;
-import org.picketbox.core.authentication.http.HTTPAuthenticationScheme;
+import org.picketbox.core.authentication.AuthenticationManager;
 import org.picketbox.core.authorization.AuthorizationManager;
-import org.picketbox.solder.authentication.AuthenticationScheme;
+import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.identity.IdentityManager;
+import org.picketbox.core.resource.ProtectedResourceManager;
 
 /**
  * <p>
@@ -52,8 +53,7 @@ import org.picketbox.solder.authentication.AuthenticationScheme;
 public class PicketBoxListener {
 
     @Inject
-    @AuthenticationScheme
-    private HTTPAuthenticationScheme authenticationScheme;
+    private AuthenticationManager authenticationManager;
 
     /**
      * <p>
@@ -66,11 +66,28 @@ public class PicketBoxListener {
 
     /**
      * <p>
+     * {@link Instance} instance to get the {@link ProtectedResourceManager}. Since the protected resource configuration is optional, the
+     * manager can not be inject as an usual injection point.
+     * </p>
+     */
+    @Inject
+    private Instance<ProtectedResourceManager> resourceManager;
+
+    /**
+     * <p>
+     * {@link Instance} instance to get the {@link IdentityManager}. Since the protected resource configuration is optional, the
+     * manager can not be inject as an usual injection point.
+     * </p>
+     */
+    @Inject
+    private Instance<IdentityManager> identityManager;
+
+    /**
+     * <p>
      * Stores and produces a {@link PicketBoxManager} instance. The instance can be injected in any CDI bean as an usual
      * injection point.
      * </p>
      */
-    @SuppressWarnings("unused")
     @Produces
     private PicketBoxManager picketBoxManager;
 
@@ -80,11 +97,9 @@ public class PicketBoxListener {
      * </p>
      */
     public void initializePicketBoxManager(@Observes @Initialized ServletContext servletContext) {
-        if (this.authenticationScheme instanceof AbstractHTTPAuthentication) {
-            ((AbstractHTTPAuthentication) this.authenticationScheme).setServletContext(servletContext);
-        }
-
         AuthorizationManager authorizationManager = null;
+        ProtectedResourceManager resourceManager = null;
+        IdentityManager identityManager = null;
 
         try {
             authorizationManager = this.authorizationManager.get();
@@ -92,8 +107,24 @@ public class PicketBoxListener {
 
         }
 
-        this.picketBoxManager = new PicketBoxConfiguration().authentication(this.authenticationScheme)
-                .authorization(authorizationManager).buildAndStart();
+        try {
+            resourceManager = this.resourceManager.get();
+        } catch (Exception e) {
+        }
+
+        try {
+            identityManager = this.identityManager.get();
+        } catch (Exception e) {
+        }
+
+        PicketBoxConfiguration configuration = new PicketBoxConfiguration();
+
+        configuration.authentication().addAuthManager(this.authenticationManager);
+        configuration.authorization(authorizationManager);
+        configuration.identityManager(identityManager);
+        configuration.resourceManager(resourceManager);
+
+        this.picketBoxManager = configuration.buildAndStart();
     }
 
 }

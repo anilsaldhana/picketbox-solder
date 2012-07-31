@@ -36,8 +36,11 @@ import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.picketbox.core.authentication.AbstractAuthenticationManager;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.authentication.http.HTTPClientCertAuthentication;
+import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
@@ -56,15 +59,52 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractHTTPAuthentica
     private HTTPClientCertAuthentication httpClientCert = null;
 
     private TestServletContext sc = new TestServletContext(new HashMap<String, String>());
+
+    private class HTTPClientCertAuthenticationTestCaseAM extends AbstractAuthenticationManager {
+        @Override
+        public Principal authenticate(final String username, Object credential) throws AuthenticationException {
+            if ("CN=jbid test, OU=JBoss, O=JBoss, C=US".equalsIgnoreCase(username) && ((String) credential).startsWith("W2G")) {
+                return new Principal() {
+                    @Override
+                    public String getName() {
+                        return username;
+                    }
+                };
+            }
+            return null;
+        }
+
+        @Override
+        public boolean started() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+        }
+
+        @Override
+        public boolean stopped() {
+            return false;
+        }
+
+        @Override
+        public void stop() {
+        }
+    }
     
     @Before
-    public void setup() throws Exception {
-        httpClientCert.setServletContext(sc);
-    }
+    public void onSetup() throws Exception {
+        PicketBoxConfiguration configuration = new PicketBoxConfiguration();
 
+        configuration.authentication().addAuthManager(new HTTPClientCertAuthenticationTestCaseAM());
+        
+        httpClientCert.setPicketBoxManager(configuration.buildAndStart());
+    }
+    
     @Test
     public void testHttpClientCert() throws Exception {
-        TestServletRequest req = new TestServletRequest(new InputStream() {
+        TestServletRequest req = new TestServletRequest(this.sc, new InputStream() {
             @Override
             public int read() throws IOException {
                 return 0;

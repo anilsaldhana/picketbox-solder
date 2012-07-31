@@ -54,7 +54,7 @@ public class PicketBoxBeanFactory {
      * @return
      */
     @Produces
-    @Named("identity")
+    @Named("authenticatedUser")
     @RequestScoped
     public PicketBoxSubject produceSubject(HttpServletRequest servletReq) {
         return this.securityManager.getAuthenticatedUser(servletReq);

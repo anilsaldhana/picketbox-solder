@@ -32,6 +32,7 @@ import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.PicketBoxMessages;
+import org.picketbox.core.authentication.http.HTTPAuthenticationScheme;
 import org.picketbox.core.exceptions.AuthenticationException;
 
 /**
@@ -49,6 +50,10 @@ public class AuthenticationManager {
     @Inject
     private PicketBoxManager securityManager;
 
+    @Inject
+    @AuthenticationScheme
+    private HTTPAuthenticationScheme authenticationScheme;
+
     /**
      * <p>
      * Observes the {@link HttpServletRequest} and executes authentication.
@@ -56,10 +61,12 @@ public class AuthenticationManager {
      */
     public void observeRequest(@Observes @Initialized ServletRequestContext requestContext) throws AuthenticationException {
         try {
+            this.authenticationScheme.setPicketBoxManager(this.securityManager);
+
             HttpServletRequest request = (HttpServletRequest) requestContext.getRequest();
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
-            if (isUserNotAuthenticated(request)) {
+            if (isUserNotAuthenticated(request) && this.securityManager.getProtectedResourceManager().getProtectedResource(request).requiresAuthentication()) {
                 authenticate(request, response);
             }
         } catch (AuthenticationException e) {
@@ -83,7 +90,7 @@ public class AuthenticationManager {
      */
     private void authenticate(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         if (!response.isCommitted()) {
-            this.securityManager.authenticate(request, response);
+            this.authenticationScheme.authenticate(request, response);
         }
     }
 
