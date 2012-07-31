@@ -6,17 +6,15 @@
 	xmlns:pb="urn:java:org.picketbox.core.authentication.http"
 	xmlns:pbs="urn:java:org.picketbox.solder.authentication"
 	xmlns:pbAuthImpl="urn:java:org.picketbox.core.authentication.impl"
+	xmlns:pbauthmgr="urn:java:org.picketbox.core.authentication.manager"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
 
 	<!-- Configure a HTTPFormAuthentication bean -->
 	<pb:HTTPFormAuthentication>
 		<s:replaces/>
 		<pbs:AuthenticationScheme/>
-		<pb:authManager>
-			<s:value>
-			    <pbAuthImpl:PropertiesFileBasedAuthenticationManager />
-			</s:value>
-		</pb:authManager>
 	</pb:HTTPFormAuthentication>
+	
+	<pbauthmgr:PropertiesFileBasedAuthenticationManager />
 	
 </beans>

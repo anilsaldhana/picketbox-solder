@@ -32,10 +32,16 @@ import java.security.Principal;
 
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.picketbox.core.authentication.DigestHolder;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.authentication.http.HTTPDigestAuthentication;
+import org.picketbox.core.authentication.impl.CertificateMechanism;
+import org.picketbox.core.authentication.impl.DigestMechanism;
+import org.picketbox.core.authentication.impl.UserNamePasswordMechanism;
+import org.picketbox.core.authentication.manager.PropertiesFileBasedAuthenticationManager;
+import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.exceptions.FormatException;
 import org.picketbox.core.util.Base64;
 import org.picketbox.core.util.HTTPDigestUtil;
@@ -54,6 +60,18 @@ public class HTTPDigestAuthenticationTestCase extends AbstractHTTPAuthentication
     @Inject
     private HTTPDigestAuthentication httpDigest = null;
 
+    @Before
+    public void onSetup() throws Exception {
+        PicketBoxConfiguration configuration = new PicketBoxConfiguration();
+
+        configuration.authentication().addMechanism(new UserNamePasswordMechanism()).addMechanism(new DigestMechanism())
+                .addMechanism(new CertificateMechanism());
+        
+        configuration.authentication().addAuthManager(new PropertiesFileBasedAuthenticationManager());
+        
+        httpDigest.setPicketBoxManager(configuration.buildAndStart());
+    }
+    
     @Test
     public void testHttpDigest() throws Exception {
         TestServletRequest req = new TestServletRequest(new InputStream() {
@@ -91,6 +109,7 @@ public class HTTPDigestAuthenticationTestCase extends AbstractHTTPAuthentication
         assertNotNull(result);
 
         req.clearHeaders();
+        req.getSession().setAttribute(PicketBoxConstants.SUBJECT, null);
 
         // Get Negative Authentication
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Digest " + getNegative());
