@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-import org.picketbox.core.PicketBoxManager;
+import org.picketbox.http.PicketBoxManager;
 import org.picketbox.core.PicketBoxSubject;
 
 /**

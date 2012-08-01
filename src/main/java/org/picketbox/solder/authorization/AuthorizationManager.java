@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.core.PicketBoxManager;
+import org.picketbox.http.PicketBoxManager;
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.exceptions.AuthorizationException;
 
@@ -53,6 +53,7 @@ public class AuthorizationManager {
      * <p>
      * Observes the {@link HttpServletRequest} and executes authorization.
      * </p>
+     *
      * @throws AuthorizationException if some problem occurs during the authorization process.
      */
     public void observeRequest(@Observes @Initialized ServletRequestContext requestContext) throws AuthorizationException {
