@@ -32,9 +32,12 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 import org.junit.runner.RunWith;
+
 /**
- * <p>Abstract class for test cases using Arquillian.</p>
- * 
+ * <p>
+ * Abstract class for test cases using Arquillian.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
@@ -42,15 +45,24 @@ import org.junit.runner.RunWith;
 public abstract class AbstractArquillianTestCase {
 
     /**
-     * <p>Creates a simple JAR file for testing. The resulting JAR already have the main PicketBox and Solder dependencies.</p>
+     * <p>
+     * Creates a simple JAR file for testing. The resulting JAR already have the main PicketBox and Solder dependencies.
+     * </p>
      */
     @Deployment
     public static Archive<?> createTestArchive() {
-        return ShrinkWrap.create(WebArchive.class, "test.jar")
+        return ShrinkWrap
+                .create(WebArchive.class, "test.jar")
                 .addAsManifestResource(EmptyAsset.INSTANCE, ArchivePaths.create("beans.xml"))
                 .addAsManifestResource("seam-beans.xml", ArchivePaths.create("seam-beans.xml"))
-                .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl").resolveAsFiles()[0]))
-                .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.picketbox:picketbox-core").resolveAsFiles()[0]));
+                .addAsLibraries(
+                        ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class)
+                                .goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl")
+                                .resolveAsFiles()[0]))
+                .addAsLibraries(
+                        ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class)
+                                .goOffline().loadMetadataFromPom("pom.xml").artifact("org.picketbox:picketbox-core")
+                                .resolveAsFiles()[0]));
     }
 
 }

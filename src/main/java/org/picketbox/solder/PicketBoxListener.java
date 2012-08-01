@@ -22,7 +22,6 @@
 
 package org.picketbox.solder;
 
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
@@ -31,10 +30,10 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.core.PicketBoxManager;
+import org.picketbox.http.PicketBoxManager;
 import org.picketbox.core.authentication.AuthenticationManager;
 import org.picketbox.core.authorization.AuthorizationManager;
-import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.http.config.PicketBoxConfiguration;
 import org.picketbox.core.identity.IdentityManager;
 import org.picketbox.core.resource.ProtectedResourceManager;
 
@@ -50,6 +49,7 @@ import org.picketbox.core.resource.ProtectedResourceManager;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
 @ApplicationScoped
+@SuppressWarnings({ "rawtypes" })
 public class PicketBoxListener {
 
     @Inject
@@ -66,8 +66,8 @@ public class PicketBoxListener {
 
     /**
      * <p>
-     * {@link Instance} instance to get the {@link ProtectedResourceManager}. Since the protected resource configuration is optional, the
-     * manager can not be inject as an usual injection point.
+     * {@link Instance} instance to get the {@link ProtectedResourceManager}. Since the protected resource configuration is
+     * optional, the manager can not be inject as an usual injection point.
      * </p>
      */
     @Inject
@@ -88,6 +88,7 @@ public class PicketBoxListener {
      * injection point.
      * </p>
      */
+    @SuppressWarnings("unused")
     @Produces
     private PicketBoxManager picketBoxManager;
 

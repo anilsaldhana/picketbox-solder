@@ -35,18 +35,20 @@ import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketbox.core.authentication.http.HTTPBasicAuthentication;
 import org.picketbox.core.authentication.impl.CertificateMechanism;
 import org.picketbox.core.authentication.impl.DigestMechanism;
 import org.picketbox.core.authentication.impl.UserNamePasswordMechanism;
 import org.picketbox.core.authentication.manager.PropertiesFileBasedAuthenticationManager;
-import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.util.Base64;
+import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
 
 /**
- * <p>Unit test the {@link HTTPBasicAuthentication} class.</p>
+ * <p>
+ * Unit test the {@link HTTPBasicAuthentication} class.
+ * </p>
+ *
  * @author anil saldhana
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
@@ -54,22 +56,23 @@ public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationT
 
     @Inject
     private HTTPBasicAuthentication httpBasic = null;
-    
+
     @Before
     public void onSetup() throws Exception {
-        PicketBoxConfiguration configuration = new PicketBoxConfiguration();
-
+        super.initialize();
         configuration.authentication().addMechanism(new UserNamePasswordMechanism()).addMechanism(new DigestMechanism())
                 .addMechanism(new CertificateMechanism());
-        
+
         configuration.authentication().addAuthManager(new PropertiesFileBasedAuthenticationManager());
-        
+
         httpBasic.setPicketBoxManager(configuration.buildAndStart());
     }
-    
+
     /**
-     * <p>Tests a HTTP Basic authentication.</p>
-     * 
+     * <p>
+     * Tests a HTTP Basic authentication.
+     * </p>
+     *
      * @throws Exception
      */
     @Test
@@ -97,7 +100,7 @@ public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationT
 
         req.clearHeaders();
         req.getSession().setAttribute(PicketBoxConstants.SUBJECT, null);
-        
+
         // Get Negative Authentication
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Basic " + getNegative());
         principal = httpBasic.authenticate(req, resp);

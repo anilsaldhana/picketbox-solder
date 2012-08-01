@@ -27,23 +27,26 @@ import java.security.cert.X509Certificate;
 import org.picketbox.core.authentication.AbstractAuthenticationManager;
 import org.picketbox.core.authentication.AuthenticationManager;
 import org.picketbox.core.authentication.DigestHolder;
-import org.picketbox.core.authentication.http.HTTPClientCertAuthentication;
+import org.picketbox.http.authentication.HTTPClientCertAuthentication;
 import org.picketbox.core.exceptions.AuthenticationException;
 
 /**
- * <p>{@link AuthenticationManager} class to be used during the tests using a {@link HTTPClientCertAuthentication}.</p>
- * 
+ * <p>
+ * {@link AuthenticationManager} class to be used during the tests using a {@link HTTPClientCertAuthentication}.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
 public class MockHTTPClientCertAuthenticationManager extends AbstractAuthenticationManager {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.authentication.AuthenticationManager#authenticate(java.lang.String, java.lang.Object)
      */
     @Override
     public Principal authenticate(final String username, Object credential) throws AuthenticationException {
-        if ("CN=jbid test, OU=JBoss, O=JBoss, C=US".equalsIgnoreCase(username)
-                && ((String) credential).startsWith("W2G")) {
+        if ("CN=jbid test, OU=JBoss, O=JBoss, C=US".equalsIgnoreCase(username) && ((String) credential).startsWith("W2G")) {
             return new Principal() {
                 @Override
                 public String getName() {
@@ -54,7 +57,9 @@ public class MockHTTPClientCertAuthenticationManager extends AbstractAuthenticat
         return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.authentication.AuthenticationManager#authenticate(org.picketbox.authentication.DigestHolder)
      */
     @Override
@@ -62,7 +67,9 @@ public class MockHTTPClientCertAuthenticationManager extends AbstractAuthenticat
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.authentication.AuthenticationManager#authenticate(java.security.cert.X509Certificate[])
      */
     @Override

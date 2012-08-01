@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:s="urn:java:ee"
 	xmlns:mail="urn:java:org.jboss.seam.mail.core"
-	xmlns:pb="urn:java:org.picketbox.core.authentication.http"
+	xmlns:pb="urn:java:org.picketbox.http.authentication"
 	xmlns:pbs="urn:java:org.picketbox.solder.authentication"
 	xmlns:pbAuthImpl="urn:java:org.picketbox.core.authentication.impl"
 	xmlns:pbauthmgr="urn:java:org.picketbox.core.authentication.manager"

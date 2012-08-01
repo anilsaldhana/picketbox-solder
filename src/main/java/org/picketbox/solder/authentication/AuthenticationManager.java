@@ -30,10 +30,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.PicketBoxMessages;
-import org.picketbox.core.authentication.http.HTTPAuthenticationScheme;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.http.PicketBoxManager;
+import org.picketbox.http.authentication.HTTPAuthenticationScheme;
 
 /**
  * <p>
@@ -59,6 +59,7 @@ public class AuthenticationManager {
      * Observes the {@link HttpServletRequest} and executes authentication.
      * </p>
      */
+    @SuppressWarnings("unchecked")
     public void observeRequest(@Observes @Initialized ServletRequestContext requestContext) throws AuthenticationException {
         try {
             this.authenticationScheme.setPicketBoxManager(this.securityManager);
@@ -66,7 +67,9 @@ public class AuthenticationManager {
             HttpServletRequest request = (HttpServletRequest) requestContext.getRequest();
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
-            if (isUserNotAuthenticated(request) && this.securityManager.getProtectedResourceManager().getProtectedResource(request).requiresAuthentication()) {
+            if (isUserNotAuthenticated(request)
+                    && this.securityManager.getProtectedResourceManager().getProtectedResource(request)
+                            .requiresAuthentication()) {
                 authenticate(request, response);
             }
         } catch (AuthenticationException e) {

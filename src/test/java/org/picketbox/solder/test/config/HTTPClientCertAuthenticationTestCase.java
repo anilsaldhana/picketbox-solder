@@ -38,19 +38,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.picketbox.core.authentication.AbstractAuthenticationManager;
 import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketbox.core.authentication.http.HTTPClientCertAuthentication;
-import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.http.authentication.HTTPClientCertAuthentication;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
 
 /**
-/**
- * <p>Unit test the {@link HTTPClientCertAuthentication} class.</p>
- * @author anil saldhana 
+ * /**
+ * <p>
+ * Unit test the {@link HTTPClientCertAuthentication} class.
+ * </p>
+ *
+ * @author anil saldhana
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  * @since July 9, 2012
  */
 public class HTTPClientCertAuthenticationTestCase extends AbstractHTTPAuthenticationTestCase {
@@ -92,16 +94,15 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractHTTPAuthentica
         public void stop() {
         }
     }
-    
+
     @Before
     public void onSetup() throws Exception {
-        PicketBoxConfiguration configuration = new PicketBoxConfiguration();
-
+        super.initialize();
         configuration.authentication().addAuthManager(new HTTPClientCertAuthenticationTestCaseAM());
-        
+
         httpClientCert.setPicketBoxManager(configuration.buildAndStart());
     }
-    
+
     @Test
     public void testHttpClientCert() throws Exception {
         TestServletRequest req = new TestServletRequest(this.sc, new InputStream() {
@@ -129,7 +130,7 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractHTTPAuthentica
 
         // Call the server to get the digest challenge
         Principal result = httpClientCert.authenticate(req, resp);
-        
+
         assertNull(result);
 
         // Now set the certificate

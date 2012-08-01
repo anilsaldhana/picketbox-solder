@@ -25,22 +25,35 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.runner.RunWith;
+import org.picketbox.http.config.PicketBoxConfiguration;
+import org.picketbox.http.resource.HTTPProtectedResourceManager;
 import org.picketbox.solder.test.TestUtil;
+
 /**
- * <p>Abstract class for test cases using Arquillian.</p>
- * 
+ * <p>
+ * Abstract class for test cases using Arquillian.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
 @RunWith(Arquillian.class)
 public abstract class AbstractHTTPAuthenticationTestCase {
 
+    protected PicketBoxConfiguration configuration = null;
+
     /**
-     * <p>Creates a simple JAR file for testing. The resulting JAR already have the main PicketBox and Solder dependencies.</p>
+     * <p>
+     * Creates a simple JAR file for testing. The resulting JAR already have the main PicketBox and Solder dependencies.
+     * </p>
      */
     @Deployment
     public static Archive<?> createTestArchive() {
         return TestUtil.createBasicTestArchive("seam-beans.xml");
     }
 
+    public void initialize() {
+        configuration = new PicketBoxConfiguration();
+        configuration.setProtectedResourceManager(new HTTPProtectedResourceManager());
+    }
 }

@@ -37,11 +37,14 @@ import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 public class TestUtil {
 
     public static WebArchive createBasicTestArchive(String solderConfig) {
-        return ShrinkWrap.create(WebArchive.class, "test.jar")
+        return ShrinkWrap
+                .create(WebArchive.class, "test.jar")
                 .addAsManifestResource(EmptyAsset.INSTANCE, ArchivePaths.create("beans.xml"))
                 .addAsManifestResource(solderConfig, ArchivePaths.create("seam-beans.xml"))
-                .addAsLibraries(ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class).goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl").resolveAsFiles()[0]));
+                .addAsLibraries(
+                        ShrinkWrap.createFromZipFile(JavaArchive.class, DependencyResolvers.use(MavenDependencyResolver.class)
+                                .goOffline().loadMetadataFromPom("pom.xml").artifact("org.jboss.solder:solder-impl")
+                                .resolveAsFiles()[0]));
     }
 
-    
 }

@@ -22,8 +22,6 @@
 
 package org.picketbox.solder.test.authentication;
 
-
-
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -50,14 +48,11 @@ import javax.servlet.http.HttpSession;
 import junit.framework.Assert;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.solder.servlet.event.ServletEventBridgeFilter;
 import org.jboss.solder.servlet.event.ServletEventBridgeListener;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -67,12 +62,14 @@ import org.picketbox.solder.authentication.AuthenticationScheme;
 import org.picketbox.solder.test.TestUtil;
 
 /**
- * <p>Tests the authentication process using the {@link PicketBoxListener}</p>
- * 
+ * <p>
+ * Tests the authentication process using the {@link PicketBoxListener}
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-//@RunWith(Arquillian.class)
+// @RunWith(Arquillian.class)
 public class AuthenticationListenerTestCase {
 
     private static final String J_SESSIONID = "JIAS912323123123123";
@@ -84,30 +81,33 @@ public class AuthenticationListenerTestCase {
 
     @Inject
     private ServletEventBridgeFilter filter;
-    
+
     @Deployment
     public static Archive<?> createTestArchive() {
         WebArchive deployment = TestUtil.createBasicTestArchive("seam-beans-auth-test.xml");
-        
-        deployment.addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.solder.test")),AuthenticationScheme.class.getPackage());
-        
+
+        deployment.addPackages(true, Filters.exclude(Package.getPackage("org.picketbox.solder.test")),
+                AuthenticationScheme.class.getPackage());
+
         return deployment;
     }
 
     /**
-     * <p>Tests the authentication process.</p>
+     * <p>
+     * Tests the authentication process.
+     * </p>
      */
-//    @Test
+    // @Test
     public void testHTTPFormAuthentication() throws Exception {
         ServletContext ctx = mock(ServletContext.class);
         HttpSession session = mock(HttpSession.class);
         FilterChain chain = mock(FilterChain.class);
-        
+
         servletEventListener.contextInitialized(new ServletContextEvent(ctx));
-        
+
         // lets send a first request and initialize the authentication process
         performPreAuthentication(ctx, session, chain);
-        
+
         // lets send a authentication request with some credentiais
         performAuthentication(ctx, session, chain);
     }
@@ -116,14 +116,14 @@ public class AuthenticationListenerTestCase {
             ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        
+
         configureMockRequest(request, PicketBoxConstants.HTTP_FORM_J_SECURITY_CHECK, ctx, session);
-        
+
         when(request.getParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME)).thenReturn(USERNAME);
         when(request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD)).thenReturn(PASSWORD);
-        
+
         final Map<String, Object> sessionAttributes = new HashMap<String, Object>();
-        
+
         Mockito.doAnswer(new Answer<Object>() {
 
             @Override
@@ -132,27 +132,30 @@ public class AuthenticationListenerTestCase {
                 return null;
             }
         }).when(session).setAttribute(anyString(), anyObject());
-        
+
         servletEventListener.requestInitialized(new ServletRequestEvent(ctx, request));
         filter.doFilter(request, response, chain);
-        
+
         Assert.assertNotNull(sessionAttributes.get(PicketBoxConstants.SUBJECT));
     }
 
-    protected void performPreAuthentication(ServletContext ctx, HttpSession session, FilterChain chain) throws IOException, ServletException {
+    protected void performPreAuthentication(ServletContext ctx, HttpSession session, FilterChain chain) throws IOException,
+            ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse firstResponse = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        
+
         configureMockRequest(request, "/test/index.jsp", ctx, session);
         when(ctx.getRequestDispatcher("/login.jsp")).thenReturn(dispatcher);
-        
+
         servletEventListener.requestInitialized(new ServletRequestEvent(ctx, request));
         filter.doFilter(request, firstResponse, chain);
     }
-    
+
     /**
-     * <p>Configures a mocked {@link HttpServletRequest} with some basic configurations.</p> 
+     * <p>
+     * Configures a mocked {@link HttpServletRequest} with some basic configurations.
+     * </p>
      */
     private void configureMockRequest(HttpServletRequest request, String uri, ServletContext ctx, HttpSession session) {
         when(request.getServletContext()).thenReturn(ctx);
@@ -165,5 +168,5 @@ public class AuthenticationListenerTestCase {
         when(request.getParameterMap()).thenReturn(new HashMap<String, String[]>());
         when(request.getRequestURI()).thenReturn(uri);
     }
-    
+
 }

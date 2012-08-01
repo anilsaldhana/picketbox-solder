@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-import org.picketbox.core.PicketBoxManager;
+import org.picketbox.http.PicketBoxManager;
 import org.picketbox.core.PicketBoxSubject;
 
 /**
@@ -43,7 +43,7 @@ public class PicketBoxProducer {
     private PicketBoxManager securityManager;
 
     @Produces
-    @Named ("identity")
+    @Named("identity")
     @RequestScoped
     public PicketBoxSubject produceSubject(HttpServletRequest servletReq) {
         return this.securityManager.getAuthenticatedUser(servletReq);
