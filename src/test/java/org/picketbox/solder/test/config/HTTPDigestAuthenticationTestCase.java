@@ -43,6 +43,7 @@ import org.picketbox.core.authentication.manager.PropertiesFileBasedAuthenticati
 import org.picketbox.core.exceptions.FormatException;
 import org.picketbox.core.util.Base64;
 import org.picketbox.core.util.HTTPDigestUtil;
+import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
@@ -65,12 +66,9 @@ public class HTTPDigestAuthenticationTestCase extends AbstractHTTPAuthentication
     @Before
     public void onSetup() throws Exception {
         super.initialize();
-        configuration.authentication().addMechanism(new UserNamePasswordMechanism()).addMechanism(new DigestMechanism())
-                .addMechanism(new CertificateMechanism());
-
         configuration.authentication().addAuthManager(new PropertiesFileBasedAuthenticationManager());
 
-        httpDigest.setPicketBoxManager(configuration.buildAndStart());
+        httpDigest.setPicketBoxManager((PicketBoxHTTPManager) configuration.buildAndStart());
     }
 
     @Test

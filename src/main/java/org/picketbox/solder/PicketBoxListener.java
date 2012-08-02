@@ -30,17 +30,18 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.http.PicketBoxManager;
 import org.picketbox.core.authentication.AuthenticationManager;
 import org.picketbox.core.authorization.AuthorizationManager;
-import org.picketbox.http.config.PicketBoxConfiguration;
+import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.identity.IdentityManager;
 import org.picketbox.core.resource.ProtectedResourceManager;
+import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.logout.HTTPLogoutManager;
 
 /**
  * <p>
  * This class provides an integration point to Solder. It is a listener for the {@link ServletContext} initialization event that
- * builds and creates a {@link PicketBoxManager} instance.
+ * builds and creates a {@link PicketBoxHTTPManager} instance.
  * </p>
  * <p>
  * It is mandatory to have a <i>META-INF/seam-beans.xml</i> file where your PicketBox configuration should be defined.
@@ -84,17 +85,17 @@ public class PicketBoxListener {
 
     /**
      * <p>
-     * Stores and produces a {@link PicketBoxManager} instance. The instance can be injected in any CDI bean as an usual
+     * Stores and produces a {@link PicketBoxHTTPManager} instance. The instance can be injected in any CDI bean as an usual
      * injection point.
      * </p>
      */
     @SuppressWarnings("unused")
     @Produces
-    private PicketBoxManager picketBoxManager;
+    private PicketBoxHTTPManager picketBoxManager;
 
     /**
      * <p>
-     * Observes the {@link ServletContext} initialization and configures the {@link PicketBoxManager}.
+     * Observes the {@link ServletContext} initialization and configures the {@link PicketBoxHTTPManager}.
      * </p>
      */
     public void initializePicketBoxManager(@Observes @Initialized ServletContext servletContext) {
@@ -120,12 +121,14 @@ public class PicketBoxListener {
 
         PicketBoxConfiguration configuration = new PicketBoxConfiguration();
 
+        configuration.manager(new PicketBoxHTTPManager());
+        configuration.logoutManager(new HTTPLogoutManager());
         configuration.authentication().addAuthManager(this.authenticationManager);
         configuration.authorization(authorizationManager);
         configuration.identityManager(identityManager);
         configuration.resourceManager(resourceManager);
 
-        this.picketBoxManager = configuration.buildAndStart();
+        this.picketBoxManager = (PicketBoxHTTPManager) configuration.buildAndStart();
     }
 
 }

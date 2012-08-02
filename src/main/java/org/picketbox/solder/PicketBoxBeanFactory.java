@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-import org.picketbox.http.PicketBoxManager;
+import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.core.PicketBoxSubject;
 
 /**
@@ -43,7 +43,7 @@ import org.picketbox.core.PicketBoxSubject;
 public class PicketBoxBeanFactory {
 
     @Inject
-    private PicketBoxManager securityManager;
+    private PicketBoxHTTPManager securityManager;
 
     /**
      * <p>

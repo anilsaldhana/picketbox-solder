@@ -32,8 +32,9 @@ import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketbox.http.PicketBoxManager;
+import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authentication.HTTPAuthenticationScheme;
+import org.picketbox.http.authorization.resource.WebResource;
 
 /**
  * <p>
@@ -48,7 +49,7 @@ import org.picketbox.http.authentication.HTTPAuthenticationScheme;
 public class AuthenticationManager {
 
     @Inject
-    private PicketBoxManager securityManager;
+    private PicketBoxHTTPManager securityManager;
 
     @Inject
     @AuthenticationScheme
@@ -68,13 +69,23 @@ public class AuthenticationManager {
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
             if (isUserNotAuthenticated(request)
-                    && this.securityManager.getProtectedResourceManager().getProtectedResource(request)
+                    && this.securityManager.getProtectedResource(createWebResource(request, response))
                             .requiresAuthentication()) {
                 authenticate(request, response);
             }
         } catch (AuthenticationException e) {
             throw PicketBoxMessages.MESSAGES.authenticationFailed(e);
         }
+    }
+
+    private WebResource createWebResource(HttpServletRequest request, HttpServletResponse response) {
+        WebResource resource = new WebResource();
+
+        resource.setContext(request.getServletContext());
+        resource.setRequest(request);
+        resource.setResponse(response);
+
+        return resource;
     }
 
     /**

@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.picketbox.core.authentication.AbstractAuthenticationManager;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authentication.HTTPClientCertAuthentication;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletRequest;
@@ -100,7 +101,7 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractHTTPAuthentica
         super.initialize();
         configuration.authentication().addAuthManager(new HTTPClientCertAuthenticationTestCaseAM());
 
-        httpClientCert.setPicketBoxManager(configuration.buildAndStart());
+        httpClientCert.setPicketBoxManager((PicketBoxHTTPManager) configuration.buildAndStart());
     }
 
     @Test

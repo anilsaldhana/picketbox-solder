@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.http.PicketBoxManager;
+import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.core.exceptions.AuthorizationException;
 
 /**
@@ -46,7 +46,7 @@ import org.picketbox.core.exceptions.AuthorizationException;
 public class LogoutManager {
 
     @Inject
-    private PicketBoxManager securityManager;
+    private PicketBoxHTTPManager securityManager;
 
     /**
      * <p>
@@ -70,7 +70,7 @@ public class LogoutManager {
      * @throws IOException if some problem occur redirecting the user to the error page.
      */
     private void logout(HttpServletRequest request, HttpServletResponse response) {
-        this.securityManager.logout(request, response);
+        this.securityManager.getLogoutManager().logout(request, response);
     }
 
 }
