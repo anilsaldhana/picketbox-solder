@@ -81,7 +81,7 @@ public class LogoutManager {
             }
         }
     }
-    
+
     /**
      * <p>
      * Checks if the request is asking for a logout.
