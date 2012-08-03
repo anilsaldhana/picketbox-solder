@@ -29,11 +29,15 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.http.PicketBoxManager;
+import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.authorization.resource.WebResource;
 import org.picketbox.core.PicketBoxMessages;
+import org.picketbox.core.PicketBoxSubject;
+import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthorizationException;
 
 /**
@@ -47,7 +51,7 @@ import org.picketbox.core.exceptions.AuthorizationException;
 public class AuthorizationManager {
 
     @Inject
-    private PicketBoxManager securityManager;
+    private PicketBoxHTTPManager securityManager;
 
     /**
      * <p>
@@ -75,9 +79,29 @@ public class AuthorizationManager {
      * @throws IOException if some problem occur redirecting the user to the error page.
      */
     private void authorize(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (!this.securityManager.authorize(request, response)) {
+        if (!this.securityManager.authorize(getAuthenticatedUser(request), createWebResource(request, response))) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
+    }
+
+    public PicketBoxSubject getAuthenticatedUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            return null;
+        }
+
+        return (PicketBoxSubject) session.getAttribute(PicketBoxConstants.SUBJECT);
+    }
+
+    private WebResource createWebResource(HttpServletRequest request, HttpServletResponse response) {
+        WebResource resource = new WebResource();
+
+        resource.setContext(request.getServletContext());
+        resource.setRequest(request);
+        resource.setResponse(response);
+
+        return resource;
     }
 
 }
