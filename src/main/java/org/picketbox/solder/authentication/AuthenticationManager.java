@@ -62,7 +62,6 @@ public class AuthenticationManager {
      * Observes the {@link HttpServletRequest} and executes authentication.
      * </p>
      */
-    @SuppressWarnings("unchecked")
     public void observeRequest(@Observes @Initialized ServletRequestContext requestContext) throws AuthenticationException {
         try {
             this.authenticationScheme.setPicketBoxManager(this.securityManager);
