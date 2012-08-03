@@ -28,9 +28,11 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.core.PicketBoxSubject;
+import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.PicketBoxHTTPSecurityContext;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -43,9 +45,9 @@ public class PicketBoxProducer {
     private PicketBoxHTTPManager securityManager;
 
     @Produces
-    @Named("identity")
+    @Named("authenticatedUser")
     @RequestScoped
-    public PicketBoxSubject produceSubject(HttpServletRequest servletReq) {
-        return this.securityManager.getAuthenticatedUser(servletReq);
+    public PicketBoxSubject produceSubject(HttpServletRequest request, HttpServletResponse response) {
+        return this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response));
     }
 }

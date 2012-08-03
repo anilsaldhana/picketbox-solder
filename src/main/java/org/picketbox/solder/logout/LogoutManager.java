@@ -32,8 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthorizationException;
+import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.PicketBoxHTTPSecurityContext;
 
 /**
  * <p>
@@ -70,7 +72,26 @@ public class LogoutManager {
      * @throws IOException if some problem occur redirecting the user to the error page.
      */
     private void logout(HttpServletRequest request, HttpServletResponse response) {
-        this.securityManager.getLogoutManager().logout(request, response);
+        if (isLogoutRequest(request)) {
+            this.securityManager.logout(this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response)));
+            try {
+                response.sendRedirect(request.getContextPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * <p>
+     * Checks if the request is asking for a logout.
+     * </p>
+     *
+     * @param request
+     * @return
+     */
+    private boolean isLogoutRequest(HttpServletRequest request) {
+        return request.getRequestURI().contains(PicketBoxConstants.LOGOUT_URI);
     }
 
 }

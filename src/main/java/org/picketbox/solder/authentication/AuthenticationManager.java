@@ -31,8 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.jboss.solder.servlet.ServletRequestContext;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.PicketBoxMessages;
+import org.picketbox.core.PicketBoxSubject;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.PicketBoxHTTPSecurityContext;
 import org.picketbox.http.authentication.HTTPAuthenticationScheme;
 import org.picketbox.http.authorization.resource.WebResource;
 
@@ -68,7 +70,7 @@ public class AuthenticationManager {
             HttpServletRequest request = (HttpServletRequest) requestContext.getRequest();
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
-            if (isUserNotAuthenticated(request)
+            if (isUserNotAuthenticated(request, response)
                     && this.securityManager.getProtectedResource(createWebResource(request, response))
                             .requiresAuthentication()) {
                 authenticate(request, response);
@@ -93,8 +95,10 @@ public class AuthenticationManager {
      * Checks if the user is already authenticated.
      * </p>
      */
-    private boolean isUserNotAuthenticated(HttpServletRequest request) {
-        return !this.securityManager.isAuthenticated(request);
+    private boolean isUserNotAuthenticated(HttpServletRequest request, HttpServletResponse response) {
+        PicketBoxSubject subject = this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response));
+
+        return !subject.isAuthenticated();
     }
 
     /**
