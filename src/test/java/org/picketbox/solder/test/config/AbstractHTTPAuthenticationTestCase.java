@@ -25,9 +25,8 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.runner.RunWith;
-import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.config.PicketBoxManagerConfiguration;
 import org.picketbox.http.PicketBoxHTTPManager;
-import org.picketbox.http.resource.HTTPProtectedResourceManager;
 import org.picketbox.solder.test.TestUtil;
 
 /**
@@ -41,7 +40,7 @@ import org.picketbox.solder.test.TestUtil;
 @RunWith(Arquillian.class)
 public abstract class AbstractHTTPAuthenticationTestCase {
 
-    protected PicketBoxConfiguration configuration = null;
+    protected PicketBoxManagerConfiguration configuration = null;
 
     /**
      * <p>
@@ -54,8 +53,7 @@ public abstract class AbstractHTTPAuthenticationTestCase {
     }
 
     public void initialize() {
-        configuration = new PicketBoxConfiguration();
-        configuration.setProtectedResourceManager(new HTTPProtectedResourceManager());
+        configuration = new PicketBoxManagerConfiguration();
         configuration.manager(new PicketBoxHTTPManager());
     }
 }

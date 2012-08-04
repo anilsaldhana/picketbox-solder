@@ -32,11 +32,10 @@ import javax.servlet.ServletContext;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.authentication.AuthenticationManager;
 import org.picketbox.core.authorization.AuthorizationManager;
-import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.config.PicketBoxManagerConfiguration;
 import org.picketbox.core.identity.IdentityManager;
-import org.picketbox.core.resource.ProtectedResourceManager;
 import org.picketbox.http.PicketBoxHTTPManager;
-import org.picketbox.http.logout.HTTPLogoutManager;
+import org.picketbox.http.resource.ProtectedResourceManager;
 
 /**
  * <p>
@@ -119,14 +118,12 @@ public class PicketBoxListener {
         } catch (Exception e) {
         }
 
-        PicketBoxConfiguration configuration = new PicketBoxConfiguration();
+        PicketBoxManagerConfiguration configuration = new PicketBoxManagerConfiguration();
 
         configuration.manager(new PicketBoxHTTPManager());
-        configuration.logoutManager(new HTTPLogoutManager());
         configuration.authentication().addAuthManager(this.authenticationManager);
         configuration.authorization(authorizationManager);
         configuration.identityManager(identityManager);
-        configuration.resourceManager(resourceManager);
 
         this.picketBoxManager = (PicketBoxHTTPManager) configuration.buildAndStart();
     }
