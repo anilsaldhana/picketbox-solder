@@ -25,9 +25,8 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.runner.RunWith;
-import org.picketbox.core.config.PicketBoxManagerConfiguration;
-import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.solder.test.TestUtil;
+import org.picketbox.test.authentication.http.AbstractAuthenticationTest;
 
 /**
  * <p>
@@ -38,9 +37,7 @@ import org.picketbox.solder.test.TestUtil;
  *
  */
 @RunWith(Arquillian.class)
-public abstract class AbstractHTTPAuthenticationTestCase {
-
-    protected PicketBoxManagerConfiguration configuration = null;
+public abstract class AbstractHTTPAuthenticationTestCase extends AbstractAuthenticationTest {
 
     /**
      * <p>
@@ -52,8 +49,4 @@ public abstract class AbstractHTTPAuthenticationTestCase {
         return TestUtil.createBasicTestArchive("seam-beans.xml");
     }
 
-    public void initialize() {
-        configuration = new PicketBoxManagerConfiguration();
-        configuration.manager(new PicketBoxHTTPManager());
-    }
 }
