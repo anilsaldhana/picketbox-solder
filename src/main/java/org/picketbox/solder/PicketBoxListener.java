@@ -32,9 +32,10 @@ import javax.servlet.ServletContext;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.authentication.AuthenticationManager;
 import org.picketbox.core.authorization.AuthorizationManager;
-import org.picketbox.core.config.PicketBoxManagerConfiguration;
 import org.picketbox.core.identity.IdentityManager;
 import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.config.HTTPConfigurationBuilder;
+import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 import org.picketbox.http.resource.ProtectedResourceManager;
 
 /**
@@ -111,6 +112,7 @@ public class PicketBoxListener {
         try {
             resourceManager = this.resourceManager.get();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {
@@ -118,14 +120,17 @@ public class PicketBoxListener {
         } catch (Exception e) {
         }
 
-        PicketBoxManagerConfiguration configuration = new PicketBoxManagerConfiguration();
+        HTTPConfigurationBuilder builder = new HTTPConfigurationBuilder();
 
-        configuration.manager(new PicketBoxHTTPManager());
-        configuration.authentication().addAuthManager(this.authenticationManager);
-        configuration.authorization(authorizationManager);
-        configuration.identityManager(identityManager);
+        builder.protectedResource().manager(resourceManager);
+        builder.authorization().manager(authorizationManager);
+        builder.identityManager().manager(identityManager);
 
-        this.picketBoxManager = (PicketBoxHTTPManager) configuration.buildAndStart();
+        PicketBoxHTTPConfiguration build = (PicketBoxHTTPConfiguration) builder.build();
+
+        this.picketBoxManager = new PicketBoxHTTPManager(build);
+
+        this.picketBoxManager.start();
     }
 
 }
