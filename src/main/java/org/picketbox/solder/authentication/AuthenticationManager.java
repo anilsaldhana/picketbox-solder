@@ -36,7 +36,6 @@ import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.PicketBoxHTTPSecurityContext;
 import org.picketbox.http.authentication.HTTPAuthenticationScheme;
-import org.picketbox.http.authorization.resource.WebResource;
 
 /**
  * <p>
@@ -69,24 +68,12 @@ public class AuthenticationManager {
             HttpServletRequest request = (HttpServletRequest) requestContext.getRequest();
             HttpServletResponse response = (HttpServletResponse) requestContext.getResponse();
 
-            if (isUserNotAuthenticated(request, response)
-                    && this.securityManager.getProtectedResource(createWebResource(request, response))
-                            .requiresAuthentication()) {
+            if (isUserNotAuthenticated(request, response)) {
                 authenticate(request, response);
             }
         } catch (AuthenticationException e) {
             throw PicketBoxMessages.MESSAGES.authenticationFailed(e);
         }
-    }
-
-    private WebResource createWebResource(HttpServletRequest request, HttpServletResponse response) {
-        WebResource resource = new WebResource();
-
-        resource.setContext(request.getServletContext());
-        resource.setRequest(request);
-        resource.setResponse(response);
-
-        return resource;
     }
 
     /**
