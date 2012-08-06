@@ -39,6 +39,7 @@ import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.authentication.manager.PropertiesFileBasedAuthenticationManager;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authentication.HTTPFormAuthentication;
+import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletContext.TestRequestDispatcher;
 import org.picketbox.test.http.TestServletRequest;
@@ -65,9 +66,13 @@ public class HTTPFormAuthenticationTestCase extends AbstractHTTPAuthenticationTe
     public void onSetup() throws Exception {
         super.initialize();
 
-        configuration.authentication().addAuthManager(new PropertiesFileBasedAuthenticationManager());
-
-        httpForm.setPicketBoxManager((PicketBoxHTTPManager) configuration.buildAndStart());
+        configuration.authentication().authManager(new PropertiesFileBasedAuthenticationManager());
+        
+        PicketBoxHTTPManager picketBoxManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
+        
+        picketBoxManager.start();
+        
+        httpForm.setPicketBoxManager(picketBoxManager);
     }
 
     @Test

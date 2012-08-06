@@ -39,6 +39,7 @@ import org.picketbox.core.authentication.manager.PropertiesFileBasedAuthenticati
 import org.picketbox.core.util.Base64;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
+import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
 
@@ -59,9 +60,13 @@ public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationT
     public void onSetup() throws Exception {
         super.initialize();
 
-        configuration.authentication().addAuthManager(new PropertiesFileBasedAuthenticationManager());
+        configuration.authentication().authManager(new PropertiesFileBasedAuthenticationManager());
 
-        httpBasic.setPicketBoxManager((PicketBoxHTTPManager) configuration.buildAndStart());
+        PicketBoxHTTPManager picketBoxManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
+        
+        picketBoxManager.start();
+        
+        httpBasic.setPicketBoxManager(picketBoxManager);
     }
 
     /**
@@ -90,6 +95,9 @@ public class HTTPBasicAuthenticationTestCase extends AbstractHTTPAuthenticationT
 
         // Get Positive Authentication
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Basic " + getPositive());
+        req.setContextPath("/test");
+        req.setRequestURI(req.getContextPath() + "/index.html");
+        
         Principal principal = httpBasic.authenticate(req, resp);
 
         assertNotNull(principal);
