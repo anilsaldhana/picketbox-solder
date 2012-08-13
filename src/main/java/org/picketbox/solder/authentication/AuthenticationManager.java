@@ -34,7 +34,6 @@ import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.PicketBoxSubject;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;
-import org.picketbox.http.PicketBoxHTTPSecurityContext;
 import org.picketbox.http.authentication.HTTPAuthenticationScheme;
 
 /**
@@ -55,6 +54,9 @@ public class AuthenticationManager {
     @Inject
     @AuthenticationScheme
     private HTTPAuthenticationScheme authenticationScheme;
+
+    @Inject
+    private HttpServletRequest request;
 
     /**
      * <p>
@@ -82,9 +84,9 @@ public class AuthenticationManager {
      * </p>
      */
     private boolean isUserNotAuthenticated(HttpServletRequest request, HttpServletResponse response) {
-        PicketBoxSubject subject = this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response));
+        PicketBoxSubject subject = this.securityManager.getSubject(request);
 
-        return !subject.isAuthenticated();
+        return subject == null || !subject.isAuthenticated();
     }
 
     /**

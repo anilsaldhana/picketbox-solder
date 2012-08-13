@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.PicketBoxSubject;
 import org.picketbox.http.PicketBoxHTTPManager;
-import org.picketbox.http.PicketBoxHTTPSecurityContext;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -48,6 +47,6 @@ public class PicketBoxProducer {
     @Named("authenticatedUser")
     @RequestScoped
     public PicketBoxSubject produceSubject(HttpServletRequest request, HttpServletResponse response) {
-        return this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response));
+        return this.securityManager.getSubject(request);
     }
 }

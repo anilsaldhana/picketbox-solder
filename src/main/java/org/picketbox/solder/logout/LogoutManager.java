@@ -35,7 +35,6 @@ import org.jboss.solder.servlet.event.Initialized;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthorizationException;
 import org.picketbox.http.PicketBoxHTTPManager;
-import org.picketbox.http.PicketBoxHTTPSecurityContext;
 
 /**
  * <p>
@@ -73,7 +72,7 @@ public class LogoutManager {
      */
     private void logout(HttpServletRequest request, HttpServletResponse response) {
         if (isLogoutRequest(request)) {
-            this.securityManager.logout(this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response)));
+            this.securityManager.logout(this.securityManager.getSubject(request));
             try {
                 response.sendRedirect(request.getContextPath());
             } catch (IOException e) {
