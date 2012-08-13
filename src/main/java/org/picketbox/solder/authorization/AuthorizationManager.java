@@ -36,7 +36,6 @@ import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.PicketBoxSubject;
 import org.picketbox.core.exceptions.AuthorizationException;
 import org.picketbox.http.PicketBoxHTTPManager;
-import org.picketbox.http.PicketBoxHTTPSecurityContext;
 import org.picketbox.http.authorization.resource.WebResource;
 
 /**
@@ -84,7 +83,7 @@ public class AuthorizationManager {
     }
 
     public PicketBoxSubject getAuthenticatedUser(HttpServletRequest request, HttpServletResponse response) {
-        return this.securityManager.createSubject(new PicketBoxHTTPSecurityContext(request, response));
+        return this.securityManager.getSubject(request);
     }
 
     private WebResource createWebResource(HttpServletRequest request, HttpServletResponse response) {

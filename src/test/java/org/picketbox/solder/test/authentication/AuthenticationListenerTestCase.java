@@ -48,11 +48,14 @@ import javax.servlet.http.HttpSession;
 import junit.framework.Assert;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.solder.servlet.event.ServletEventBridgeFilter;
 import org.jboss.solder.servlet.event.ServletEventBridgeListener;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -97,7 +100,7 @@ public class AuthenticationListenerTestCase {
      * Tests the authentication process.
      * </p>
      */
-    // @Test
+//     @Test
     public void testHTTPFormAuthentication() throws Exception {
         ServletContext ctx = mock(ServletContext.class);
         HttpSession session = mock(HttpSession.class);
