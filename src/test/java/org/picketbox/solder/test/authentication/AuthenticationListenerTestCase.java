@@ -72,7 +72,7 @@ import org.picketbox.solder.test.TestUtil;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
- @RunWith(Arquillian.class)
+// @RunWith(Arquillian.class)
 public class AuthenticationListenerTestCase {
 
     private static final String J_SESSIONID = "JIAS912323123123123";
@@ -100,7 +100,7 @@ public class AuthenticationListenerTestCase {
      * Tests the authentication process.
      * </p>
      */
-     @Test
+//     @Test
     public void testHTTPFormAuthentication() throws Exception {
         ServletContext ctx = mock(ServletContext.class);
         HttpSession session = mock(HttpSession.class);
